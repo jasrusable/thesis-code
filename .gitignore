@@ -29,3 +29,6 @@
 
 # Sublime Stuff
 *.sublime-workspace
+
+# Build directory
+./main/build/
