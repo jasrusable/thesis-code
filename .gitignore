@@ -31,4 +31,4 @@
 *.sublime-workspace
 
 # Build directory
-./main/build/
+./my_app/build/
