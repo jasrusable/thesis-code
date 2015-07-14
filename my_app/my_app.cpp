@@ -1,8 +1,9 @@
-#include "my_app.h"
+#include <iostream>
+
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-#include <iostream>
+#include "my_app.h"
 
 using namespace cv;
 using namespace std;
