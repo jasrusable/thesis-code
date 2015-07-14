@@ -4,8 +4,8 @@ project (my_app)
 find_package(OpenCV REQUIRED)
 
 # The version number.
-set (Tutorial_VERSION_MAJOR 1)
-set (Tutorial_VERSION_MINOR 0)
+set (my_app_VERSION_MAJOR 1)
+set (my_app_VERSION_MINOR 0)
 
 # configure a header file to pass some of the CMake settings
 # to the source code
