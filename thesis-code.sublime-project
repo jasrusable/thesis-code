@@ -4,5 +4,13 @@
 		{
 			"path": "."
 		}
+	],
+	"build_systems":
+	[
+		{
+			"name": "my_app-build",
+			"cmd": ["bash", "./build.sh"],
+    		"working_dir": "${project_path:${folder}}/my_app",
+		}
 	]
 }
