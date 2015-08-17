@@ -25,10 +25,10 @@ int main()
 
 
   //-- Step 1: Detect the keypoints and extract descriptors using SURF
-  int minHessian = 800;
+  int minHessian = 450;
 
   //SurfFeatureDetector detector(minHessian);
-  Ptr<xfeatures2d::SURF> surf = xfeatures2d::SURF::create(minHessian);
+  Ptr<xfeatures2d::SURF> surf = xfeatures2d::SURF::create();
 
   // note, that it's also far more efficient, to compute keypoints and descriptors in one go.
 
@@ -43,7 +43,7 @@ int main()
   //-- Step 3: Matching descriptor vectors using FLANN matcher
   FlannBasedMatcher matcher;
   std::vector< DMatch > matches;
-  matcher.match( descriptors_object, descriptors_scene, matches );
+  matcher.match( descriptors_object, descriptors_scene, matches);
 
   double max_dist = 0; double min_dist = 100;
 
@@ -60,8 +60,9 @@ int main()
   //-- Draw only "good" matches (i.e. whose distance is less than 3*min_dist )
   std::vector< DMatch > good_matches;
 
+
   for( int i = 0; i < descriptors_object.rows; i++ )
-  { if( matches[i].distance < 10*min_dist )
+  { if( matches[i].distance < 3*min_dist )
      { good_matches.push_back( matches[i]); }
   }
 
