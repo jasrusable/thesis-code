@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/jason/git/thesis-code/meh/main.cpp
+stdio.h
+-
+iostream
+-
+opencv2/core/core.hpp
+-
+opencv2/features2d.hpp
+-
+opencv2/highgui.hpp
+-
+opencv2/calib3d.hpp
+-
+opencv2/xfeatures2d.hpp
+-
+

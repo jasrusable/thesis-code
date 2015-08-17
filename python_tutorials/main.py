@@ -3,6 +3,7 @@ import numpy as np
 import cv2
 from matplotlib import pyplot as plt
 
+
 MIN_MATCH_COUNT = 10
 FLANN_INDEX_KDTREE = 0
 
@@ -15,7 +16,7 @@ img1 = cv2.imread(object_image_path, 0)          # queryImage
 img2 = cv2.imread(scene_image_path, 0) # trainImage
 
 # Initiate SIFT detector
-sift = cv2.xfeatures2d.SIFT_create()
+sift = cv2.xfeatures2d.SIFT_create(450)
 
 # find the keypoints and descriptors with SIFT
 kp1, des1 = sift.detectAndCompute(img1, None)
