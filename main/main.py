@@ -1,6 +1,6 @@
 import os
-import numpy as np
 import cv2
+import numpy as np
 from matplotlib import pyplot as plt
 
 
@@ -9,18 +9,15 @@ FLANN_INDEX_KDTREE = 0
 
 directory = '../images/model_1'
 
-object_image_path = os.path.join(directory, 'object.png')
-scene_image_path = os.path.join(directory, 'scene.png')
-
-img1 = cv2.imread(object_image_path, 0)          # queryImage
-img2 = cv2.imread(scene_image_path, 0) # trainImage
+object_image = cv2.imread(os.path.join(directory, 'object.png'), 0)          # queryImage
+scene_image = cv2.imread(os.path.join(directory, 'scene.png'), 0) # trainImage
 
 # Initiate SIFT detector
 sift = cv2.xfeatures2d.SIFT_create(450)
 
 # find the keypoints and descriptors with SIFT
-kp1, des1 = sift.detectAndCompute(img1, None)
-kp2, des2 = sift.detectAndCompute(img2, None)
+object_image_keypoints, object_image_descriptors = sift.detectAndCompute(object_image, None)
+scene_image_keypoints, scene_image_descriptors = sift.detectAndCompute(scene_image, None)
 
 index_params = dict(
     algorithm = FLANN_INDEX_KDTREE, 
@@ -33,30 +30,27 @@ search_params = dict(
 
 flann = cv2.FlannBasedMatcher(index_params, search_params)
 
-matches = flann.knnMatch(des1, des2, k=2)
+matches = flann.knnMatch(object_image_descriptors, scene_image_descriptors, k=2)
 
-# store all the good matches as per Lowe's ratio test.
-good = []
-for m, n in matches:
-    if m.distance < 0.7 * n.distance:
-        good.append(m)
+# store all the good_matches matches as per Lowe's ratio test.
+good_matches = []
+for object_image_match, scene_image_match in matches:
+    if object_image_match.distance < 0.7 * scene_image_match.distance:
+        good_matches.append(object_image_match)
 
-if len(good) > MIN_MATCH_COUNT:
-    src_pts = np.float32([kp1[m.queryIdx].pt for m in good]).reshape(-1, 1, 2)
-    dst_pts = np.float32([kp2[m.trainIdx].pt for m in good]).reshape(-1, 1, 2)
+assert len(good_matches) > MIN_MATCH_COUNT
 
-    M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
-    matchesMask = mask.ravel().tolist()
+src_pts = np.float32([object_image_keypoints[match.queryIdx].pt for match in good_matches]).reshape(-1, 1, 2)
+dst_pts = np.float32([scene_image_keypoints[match.trainIdx].pt for match in good_matches]).reshape(-1, 1, 2)
 
-    h, w = img1.shape
-    pts = np.float32([[0, 0], [0, h - 1], [w - 1, h - 1], [w - 1, 0]]).reshape(-1, 1, 2)
-    dst = cv2.perspectiveTransform(pts, M)
+M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
+matchesMask = mask.ravel().tolist()
 
-    img2 = cv2.polylines(img2, [np.int32(dst)], True, 255, 3, cv2.LINE_AA)
+h, w = object_image.shape
+pts = np.float32([[0, 0], [0, h - 1], [w - 1, h - 1], [w - 1, 0]]).reshape(-1, 1, 2)
+dst = cv2.perspectiveTransform(pts, M)
 
-else:
-    print ("Not enough matches are found - %d/%d" % (len(good),MIN_MATCH_COUNT))
-    matchesMask = None
+scene_image = cv2.polylines(scene_image, [np.int32(dst)], True, 255, 3, cv2.LINE_AA)
 
 draw_params = dict(
     matchColor = (0, 255, 0), # draw matches in green color
@@ -65,7 +59,7 @@ draw_params = dict(
     flags = 2
 )
 
-img3 = cv2.drawMatches(img1, kp1, img2, kp2 ,good, None, **draw_params)
+img3 = cv2.drawMatches(object_image, object_image_keypoints, scene_image, scene_image_keypoints, good_matches, None, **draw_params)
 
 plt.imshow(img3, 'gray')
 plt.show()
