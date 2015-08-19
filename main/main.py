@@ -8,6 +8,7 @@ from detectors import SIFTDetector, ORBDetector
 from matchers import BruteForceMatcher, FLANNMatcher
 
 class Thing(object):
+	#TODO: hook up homogrophy
 	def __init__(self, test_image, train_image, detector, matcher, detect_now=False, match_now=False):
 		self.test_image = test_image
 		self.train_image = train_image
