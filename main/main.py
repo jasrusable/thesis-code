@@ -22,8 +22,8 @@ class Thing(object):
 			self.match()
 
 	def detect(self):
-		self.test_keypoints, self.test_descriptors = self.detector.compute(self.test_image)
-		self.train_keypoints, self.train_descriptors = self.detector.compute(self.train_image)
+		self.test_keypoints, self.test_descriptors = self.detector.detect(self.test_image)
+		self.train_keypoints, self.train_descriptors = self.detector.detect(self.train_image)
 
 	def match(self):
 		self.matches = self.matcher.match(self.test_descriptors, self.train_descriptors)
