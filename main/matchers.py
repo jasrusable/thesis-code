@@ -14,6 +14,10 @@ class BruteForceMatcher(Matcher):
         Matcher.__init__(self)
         self.brute_force_matcher = BFMatcher(NORM_HAMMING, crossCheck=True)
 
+    def __repr__(self):
+        return ("BruteForceMatcher(brute_force_matcher={brute_force_matcher})"
+            .format(brute_force_matcher=self.brute_force_matcher))
+
     def compute(self, test_descriptors, train_descriptors):
         matches = self.brute_force_matcher.match(test_descriptors, train_descriptors)
         matches = sorted(matches, key = lambda x:x.distance)
@@ -31,6 +35,9 @@ class FLANNMatcher(Matcher):
             'checks': 50,
         }
         self.FLANN = FlannBasedMatcher(index_params, search_params)
+
+    def __repr__(self):
+        return "FLANNMatcher(FLANN={FLANN})".format(FLANN=self.FLANN)
 
     def compute(self, test_descriptors, train_descriptors):
         matches = self.FLANN.knnMatch(test_descriptors, train_descriptors, k=2)

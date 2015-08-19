@@ -14,6 +14,9 @@ class ORBDetector(Detector):
         Detector.__init__(self)
         self.ORB = ORB_create()
 
+    def __repr__(self):
+        return "ORBDetector(ORB={ORB})".format(ORB=self.ORB)
+
     def compute(self, image):
         keypoints = self.ORB.detect(image, None)
         keypoints, descriptors = self.ORB.compute(image, keypoints)
@@ -23,6 +26,9 @@ class SIFTDetector(Detector):
     def __init__(self):
         Detector.__init__(self)
         self.SIFT = SIFT_create()
+
+    def __repr__(self):
+        return "SIFTDetector(SIFT={SIFT}".format(SIFT=self.SIFT)
 
     def compute(self, image):
         keypoints, descriptors = self.SIFT.detectAndCompute(image, None)

@@ -13,6 +13,9 @@ class Thing(object):
 		self.train_image = train_image
 		self.detector = detector
 		self.matcher = matcher
+		self.test_keypoints = None
+		self.train_descriptors = None
+		self.matches = None
 		if detect_now:
 			self.detect()
 		if match_now:
@@ -36,22 +39,16 @@ class Thing(object):
 		plt.imshow(img3, 'gray')
 		plt.show()
 
-
 directory = '../images/model_1'
 
 object_image = cv2.imread(os.path.join(directory, 'object.png'), 0)          # queryImage
 scene_image = cv2.imread(os.path.join(directory, 'scene.png'), 0) # trainImage
 
-my_SIFT_detector = SIFTDetector()
-my_ORB_detector = ORBDetector()
-my_FLANN_matcher = FLANNMatcher()
-my_brute_force_matcher = BruteForceMatcher()
-
 my_thing = Thing(
 	test_image=object_image,
 	train_image=scene_image,
-	detector=my_ORB_detector,
-	matcher=my_brute_force_matcher,
+	detector=ORBDetector(),
+	matcher=BruteForceMatcher(),
 )
 
 my_thing.detect()
