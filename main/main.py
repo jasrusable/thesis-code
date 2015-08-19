@@ -26,7 +26,7 @@ class Thing(object):
 		self.train_keypoints, self.train_descriptors = self.detector.compute(self.train_image)
 
 	def match(self):
-		self.matches = self.matcher.compute(self.test_descriptors, self.train_descriptors)
+		self.matches = self.matcher.match(self.test_descriptors, self.train_descriptors)
 
 	def plot(self):
 		img3 = my_homogrophy.get_homogrophy(

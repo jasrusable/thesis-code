@@ -6,7 +6,7 @@ class Matcher(object):
     def __init__(self):
         pass
 
-    def compute(self, test_descriptors, train_descriptors):
+    def match(self, test_descriptors, train_descriptors):
         raise NotImplementedError('This method is to be implemented in a subclass.')
 
 class BruteForceMatcher(Matcher):
@@ -18,7 +18,7 @@ class BruteForceMatcher(Matcher):
         return ("BruteForceMatcher(brute_force_matcher={brute_force_matcher})"
             .format(brute_force_matcher=self.brute_force_matcher))
 
-    def compute(self, test_descriptors, train_descriptors):
+    def match(self, test_descriptors, train_descriptors):
         matches = self.brute_force_matcher.match(test_descriptors, train_descriptors)
         matches = sorted(matches, key = lambda x:x.distance)
         return matches
@@ -39,7 +39,7 @@ class FLANNMatcher(Matcher):
     def __repr__(self):
         return "FLANNMatcher(FLANN={FLANN})".format(FLANN=self.FLANN)
 
-    def compute(self, test_descriptors, train_descriptors):
+    def match(self, test_descriptors, train_descriptors):
         matches = self.FLANN.knnMatch(test_descriptors, train_descriptors, k=2)
         #TODO: Where should this good_matches filter happen?
         good_matches = []
