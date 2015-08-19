@@ -3,63 +3,56 @@ import cv2
 import numpy as np
 from matplotlib import pyplot as plt
 
+import my_homogrophy
+from detectors import SIFTDetector, ORBDetector
+from matchers import BruteForceMatcher, FLANNMatcher
 
-MIN_MATCH_COUNT = 10
-FLANN_INDEX_KDTREE = 0
+class Thing(object):
+	def __init__(self, test_image, train_image, detector, matcher, detect_now=False, match_now=False):
+		self.test_image = test_image
+		self.train_image = train_image
+		self.detector = detector
+		self.matcher = matcher
+		if detect_now:
+			self.detect()
+		if match_now:
+			self.match()
+
+	def detect(self):
+		self.test_keypoints, self.test_descriptors = self.detector.compute(self.test_image)
+		self.train_keypoints, self.train_descriptors = self.detector.compute(self.train_image)
+
+	def match(self):
+		self.matches = self.matcher.compute(self.test_descriptors, self.train_descriptors)
+
+	def plot(self):
+		img3 = my_homogrophy.get_homogrophy(
+			self.test_image, 
+			self.train_image, 
+			self.test_keypoints, 
+			self.train_keypoints, 
+			self.matches
+		)
+		plt.imshow(img3, 'gray')
+		plt.show()
+
 
 directory = '../images/model_1'
 
 object_image = cv2.imread(os.path.join(directory, 'object.png'), 0)          # queryImage
 scene_image = cv2.imread(os.path.join(directory, 'scene.png'), 0) # trainImage
 
-# Initiate SIFT detector
-sift = cv2.xfeatures2d.SIFT_create(450)
+my_SIFT_detector = SIFTDetector()
+my_ORB_detector = ORBDetector()
+my_FLANN_matcher = FLANNMatcher()
+my_brute_force_matcher = BruteForceMatcher()
 
-# find the keypoints and descriptors with SIFT
-object_image_keypoints, object_image_descriptors = sift.detectAndCompute(object_image, None)
-scene_image_keypoints, scene_image_descriptors = sift.detectAndCompute(scene_image, None)
-
-index_params = dict(
-    algorithm = FLANN_INDEX_KDTREE, 
-    trees = 5,
+my_thing = Thing(
+	test_image=object_image,
+	train_image=scene_image,
+	detector=my_ORB_detector,
+	matcher=my_brute_force_matcher,
 )
 
-search_params = dict(
-    checks = 50
-)
-
-flann = cv2.FlannBasedMatcher(index_params, search_params)
-
-matches = flann.knnMatch(object_image_descriptors, scene_image_descriptors, k=2)
-
-# store all the good_matches matches as per Lowe's ratio test.
-good_matches = []
-for object_image_match, scene_image_match in matches:
-    if object_image_match.distance < 0.7 * scene_image_match.distance:
-        good_matches.append(object_image_match)
-
-assert len(good_matches) > MIN_MATCH_COUNT
-
-src_pts = np.float32([object_image_keypoints[match.queryIdx].pt for match in good_matches]).reshape(-1, 1, 2)
-dst_pts = np.float32([scene_image_keypoints[match.trainIdx].pt for match in good_matches]).reshape(-1, 1, 2)
-
-M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
-matchesMask = mask.ravel().tolist()
-
-h, w = object_image.shape
-pts = np.float32([[0, 0], [0, h - 1], [w - 1, h - 1], [w - 1, 0]]).reshape(-1, 1, 2)
-dst = cv2.perspectiveTransform(pts, M)
-
-scene_image = cv2.polylines(scene_image, [np.int32(dst)], True, 255, 3, cv2.LINE_AA)
-
-draw_params = dict(
-    matchColor = (0, 255, 0), # draw matches in green color
-    singlePointColor = None,
-    matchesMask = matchesMask, # draw only inliers
-    flags = 2
-)
-
-img3 = cv2.drawMatches(object_image, object_image_keypoints, scene_image, scene_image_keypoints, good_matches, None, **draw_params)
-
-plt.imshow(img3, 'gray')
-plt.show()
+my_thing.detect()
+my_thing.match()
