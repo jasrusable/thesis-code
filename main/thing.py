@@ -43,7 +43,7 @@ class Thing(object):
     def homogrophy(self):
         src_pts = np.float32([self._test_keypoints[match.queryIdx].pt for match in self._matches]).reshape(-1, 1, 2)
         dst_pts = np.float32([self._train_keypoints[match.trainIdx].pt for match in self._matches]).reshape(-1, 1, 2)
-        M, mask = findHomography(src_pts, dst_pts, RANSAC, 5.0)
+        M, mask = findHomography(src_pts, dst_pts, RANSAC, 10.0)
         matchesMask = mask.ravel().tolist()
         h, w = self._test_image.cv_image.shape
         pts = np.float32([[0, 0], [0, h - 1], [w - 1, h - 1], [w - 1, 0]]).reshape(-1, 1, 2)
