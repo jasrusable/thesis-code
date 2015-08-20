@@ -3,7 +3,7 @@ from os.path import join
 
 from detectors import SIFTDetector, ORBDetector
 from matchers import BruteForceMatcher, FLANNMatcher
-from image import Image
+from images import TestImage, TrainImage
 from thing import Thing
 from camera import Camera
 from perspective_center import PerspectiveCenter
@@ -21,19 +21,19 @@ iphone4s = Camera(
 
 directory = '../images/model_1'
 
-test_image = Image(
+test_image = TestImage(
     file_path=join(directory, 'object.png'),
     camera=iphone4s,
+)
+
+train_image = TrainImage(
+    file_path=join(directory, 'scene.png'),
+    camera=blender_cam,
     perspective_center=PerspectiveCenter(
         x=2.49426,
         y=1.35657,
         z=-0.24957,
-        )
-)
-
-train_image = Image(
-    file_path=join(directory, 'scene.png'),
-    camera=blender_cam,
+    )
 )
 
 my_thing = Thing(
