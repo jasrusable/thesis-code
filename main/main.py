@@ -20,4 +20,3 @@ my_thing = Thing(
 )
 
 my_thing.detect_and_match()
-

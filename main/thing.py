@@ -30,8 +30,8 @@ class Thing(object):
         self._matcher = matcher
 
     def detect(self):
-        self._test_keypoints, self._test_descriptors = self._detector.detect(self._test_image)
-        self._train_keypoints, self._train_descriptors = self._detector.detect(self._train_image)
+        self._test_keypoints, self._test_descriptors = self._detector.detect(self._test_image._cv_image)
+        self._train_keypoints, self._train_descriptors = self._detector.detect(self._train_image._cv_image)
 
     def match(self):
         self._matches = self._matcher.match(self._test_descriptors, self._train_descriptors)
@@ -45,10 +45,10 @@ class Thing(object):
         dst_pts = np.float32([self._train_keypoints[match.trainIdx].pt for match in self._matches]).reshape(-1, 1, 2)
         M, mask = findHomography(src_pts, dst_pts, RANSAC, 5.0)
         matchesMask = mask.ravel().tolist()
-        h, w = self._test_image.shape
+        h, w = self._test_image._cv_image.shape
         pts = np.float32([[0, 0], [0, h - 1], [w - 1, h - 1], [w - 1, 0]]).reshape(-1, 1, 2)
         dst = perspectiveTransform(pts, M)
-        scene_image = polylines(self._train_image, [np.int32(dst)], True, 255, 3, LINE_AA)
+        scene_image = polylines(self._train_image._cv_image, [np.int32(dst)], True, 255, 3, LINE_AA)
         draw_params = dict(
             matchColor = (0, 255, 0), # draw matches in green color
             singlePointColor = None,
@@ -56,11 +56,11 @@ class Thing(object):
             flags = 2
         )
         img3 = drawMatches(
-            self._test_image, 
-            self._test_keypoints, 
-            self._train_image, 
-            self._train_keypoints, 
-            self._matches, 
+            self._test_image._cv_image,
+            self._test_keypoints,
+            self._train_image._cv_image,
+            self._train_keypoints,
+            self._matches,
             None, 
             **draw_params
         )
