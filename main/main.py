@@ -3,9 +3,9 @@ import cv2
 import numpy as np
 from matplotlib import pyplot as plt
 
-import my_homogrophy
 from detectors import SIFTDetector, ORBDetector
 from matchers import BruteForceMatcher, FLANNMatcher
+
 
 class Thing(object):
     #TODO: hook up homogrophy
