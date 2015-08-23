@@ -6,17 +6,17 @@ from cv2 import LINE_AA, RANSAC
 
 
 class Thing(object):
-    def __init__(self, test_image, train_image, detector, matcher, detect_now=False, match_now=False):
+    def __init__(self, test_image, query_image, detector, matcher, detect_now=False, match_now=False):
         self._test_image = test_image
-        self._train_image = train_image
+        self._train_image = query_image
         if detector:
             self.set_detector(detector)
         if matcher:
             self.set_matcher(matcher)
         self._test_keypoints = None
         self._test_descriptors = None
-        self._train_keypoints = None
-        self._train_descriptors = None
+        self._query_keypoints = None
+        self._query_descriptors = None
         self._matches = None
         if detect_now:
             self.detect()
@@ -31,10 +31,10 @@ class Thing(object):
 
     def detect(self):
         self._test_keypoints, self._test_descriptors = self._detector.detect(self._test_image.cv_image)
-        self._train_keypoints, self._train_descriptors = self._detector.detect(self._train_image.cv_image)
+        self._query_keypoints, self._query_descriptors = self._detector.detect(self._train_image.cv_image)
 
     def match(self):
-        self._matches = self._matcher.match(self._test_descriptors, self._train_descriptors)
+        self._matches = self._matcher.match(self._test_descriptors, self._query_descriptors)
 
     def detect_and_match(self):
         self.detect()
@@ -42,7 +42,7 @@ class Thing(object):
 
     def homogrophy(self):
         src_pts = np.float32([self._test_keypoints[match.queryIdx].pt for match in self._matches]).reshape(-1, 1, 2)
-        dst_pts = np.float32([self._train_keypoints[match.trainIdx].pt for match in self._matches]).reshape(-1, 1, 2)
+        dst_pts = np.float32([self._query_keypoints[match.trainIdx].pt for match in self._matches]).reshape(-1, 1, 2)
         M, mask = findHomography(src_pts, dst_pts, RANSAC, 10.0)
         matchesMask = mask.ravel().tolist()
         h, w = self._test_image.cv_image.shape
@@ -59,7 +59,7 @@ class Thing(object):
             self._test_image.cv_image,
             self._test_keypoints,
             self._train_image.cv_image,
-            self._train_keypoints,
+            self._query_keypoints,
             self._matches,
             None, 
             **draw_params

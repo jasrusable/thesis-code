@@ -1,8 +1,6 @@
 from os.path import isfile
 from cv2 import imread
 
-from perspective_center import PerspectiveCenter
-
 
 class Image(object):
     def __init__(self, file_path, camera=None):
@@ -15,7 +13,6 @@ class TestImage(Image):
     def __init__(self, file_path, camera=None):
         Image.__init__(self, file_path, camera)
 
-class TrainImage(Image):
-    def __init__(self, file_path, camera, perspective_center):
+class QueryImage(Image):
+    def __init__(self, file_path, camera):
         Image.__init__(self, file_path, camera)
-        self.perspective_center = perspective_center
