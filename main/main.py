@@ -1,12 +1,13 @@
 import cv2
 from os.path import join
 
-from detectors import SIFTDetector, ORBDetector
-from matchers import BruteForceMatcher, FLANNMatcher
-from images import TestImage, QueryImage
-from thing import Thing
-from camera import Camera
+from matcher import Session, Thing
+from matcher import Camera, TestImage, QueryImage
+from matcher import ORBDetector, SIFTDetector
+from matcher import BruteForceMatcher, FLANNMatcher
 
+
+session = Session()
 
 blender_cam = Camera(
     focal_length=0.035,
@@ -36,4 +37,3 @@ my_thing = Thing(
 )
 
 my_thing.detect_and_match()
-my_thing.plot()
