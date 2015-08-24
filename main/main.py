@@ -36,4 +36,12 @@ my_thing = Thing(
     matcher=BruteForceMatcher(),
 )
 
+my_thing_2 = Thing(
+    test_image=test_image,
+    query_image=query_image,
+    detector=SIFTDetector(),
+    matcher=FLANNMatcher(),
+)
+
 my_thing.detect_and_match()
+my_thing_2.detect_and_match()
