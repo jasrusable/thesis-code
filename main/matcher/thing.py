@@ -29,6 +29,9 @@ class Thing(object):
     def set_matcher(self, matcher):
         self._matcher = matcher
 
+    def get_matches(self):
+        return self._matches
+
     def detect(self):
         self._test_keypoints, self._test_descriptors = self._detector.detect(self._test_image.cv_image)
         self._query_keypoints, self._query_descriptors = self._detector.detect(self._train_image.cv_image)
@@ -55,6 +58,10 @@ class Thing(object):
             matchesMask = matchesMask, # draw only inliers
             flags = 2
         )
+        return draw_params
+
+    def plot(self):
+        draw_params = self.homogrophy()
         img3 = drawMatches(
             self._test_image.cv_image,
             self._test_keypoints,
@@ -64,9 +71,5 @@ class Thing(object):
             None, 
             **draw_params
         )
-        return img3
-
-    def plot(self):
-        img3 = self.homogrophy()
         plt.imshow(img3, 'gray')
         plt.show()
