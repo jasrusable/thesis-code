@@ -1,10 +1,13 @@
 import cv2
+import numpy as np
 from os.path import join
+from matplotlib import pyplot as plt
 
 from matcher import Session, Thing
 from matcher import Camera, TestImage, QueryImage
 from matcher import ORBDetector, SIFTDetector
 from matcher import BruteForceMatcher, FLANNMatcher
+from matcher import AveragingSmoother
 
 
 session = Session()
@@ -43,5 +46,5 @@ my_thing_2 = Thing(
     matcher=FLANNMatcher(),
 )
 
-my_thing.detect_and_match()
-my_thing_2.detect_and_match()
+#my_thing.detect_and_match()
+
