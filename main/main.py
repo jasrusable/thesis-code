@@ -47,4 +47,3 @@ my_thing_2 = Thing(
 )
 
 #my_thing.detect_and_match()
-

@@ -7,7 +7,10 @@ class Matcher(object):
         pass
 
     def match(self, test_descriptors, train_descriptors):
-        raise NotImplementedError('This method is to be implemented in a subclass.')
+        raise NotImplementedError(
+            'This method is to be implemented in a subclass.'
+        )
+
 
 class BruteForceMatcher(Matcher):
     def __init__(self):
@@ -16,19 +19,22 @@ class BruteForceMatcher(Matcher):
 
     def __repr__(self):
         return ("BruteForceMatcher(brute_force_matcher={brute_force_matcher})"
-            .format(brute_force_matcher=self.brute_force_matcher))
+                .format(brute_force_matcher=self.brute_force_matcher))
 
     def match(self, test_descriptors, train_descriptors):
-        matches = self.brute_force_matcher.match(test_descriptors, train_descriptors)
-        matches = sorted(matches, key = lambda x:x.distance)
+        matches = self.brute_force_matcher.match(
+            test_descriptors, train_descriptors
+        )
+        matches = sorted(matches, key=lambda x: x.distance)
         return matches
+
 
 class FLANNMatcher(Matcher):
     def __init__(self):
         Matcher.__init__(self)
         FLANN_INDEX_KDTREE = 0
         index_params = {
-            'algorithm': FLANN_INDEX_KDTREE, 
+            'algorithm': FLANN_INDEX_KDTREE,
             'trees': 5,
         }
         search_params = {
@@ -41,7 +47,7 @@ class FLANNMatcher(Matcher):
 
     def match(self, test_descriptors, train_descriptors):
         matches = self.FLANN.knnMatch(test_descriptors, train_descriptors, k=2)
-        #TODO: Where should this good_matches filter happen?
+        # TODO: Where should this good_matches filter happen?
         good_matches = []
         # store all the good_matches matches as per Lowe's ratio test.
         for object_image_match, scene_image_match in matches:

@@ -7,7 +7,10 @@ class Detector(object):
         pass
 
     def detect(self, image):
-        raise NotImplementedError('This method is to be implemented in a subclass.')
+        raise NotImplementedError(
+            'This method is to be implemented in a subclass.'
+        )
+
 
 class ORBDetector(Detector):
     def __init__(self):
@@ -21,6 +24,7 @@ class ORBDetector(Detector):
         keypoints = self.ORB.detect(image, None)
         keypoints, descriptors = self.ORB.compute(image, keypoints)
         return keypoints, descriptors
+
 
 class SIFTDetector(Detector):
     def __init__(self):

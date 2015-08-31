@@ -6,7 +6,10 @@ class Smoother(object):
         pass
 
     def smooth(self, image):
-        raise NotImplementedError('This method is to be implemented in a subclass.')
+        raise NotImplementedError(
+            'This method is to be implemented in a subclass.'
+        )
+
 
 class AveragingSmoother(Smoother):
     def __init__(self, kernel_x, kernel_y):
