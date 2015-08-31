@@ -32,12 +32,12 @@ query_image = QueryImage(
 
 my_thing = TestCase(
     test_image=test_image,
+    query_image=query_image,
     test_preprocessors=[
-        GaussianSmoother(kernel_x=3, kernel_y=3),
+        AveragingSmoother(kernel_x=1, kernel_y=1),
     ],
     query_preprocessors=[
     ],
-    query_image=query_image,
     detector=ORBDetector(),
     matcher=BruteForceMatcher(),
 )
