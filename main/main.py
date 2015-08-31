@@ -7,7 +7,7 @@ from matcher import Session, TestCase
 from matcher import Camera, TestImage, QueryImage
 from matcher import ORBDetector, SIFTDetector
 from matcher import BruteForceMatcher, FLANNMatcher
-from matcher import AveragingSmoother
+from matcher import AveragingSmoother, GaussianSmoother
 
 
 session = Session()
@@ -32,17 +32,15 @@ query_image = QueryImage(
 
 my_thing = TestCase(
     test_image=test_image,
+    test_preprocessors=[
+        GaussianSmoother(kernel_x=3, kernel_y=3),
+    ],
+    query_preprocessors=[
+    ],
     query_image=query_image,
     detector=ORBDetector(),
     matcher=BruteForceMatcher(),
 )
 
-my_thing_2 = TestCase(
-    test_image=test_image,
-    query_image=query_image,
-    detector=SIFTDetector(),
-    matcher=FLANNMatcher(),
-)
-
-my_thing.detect_and_match()
+my_thing.do_all()
 my_thing.plot()

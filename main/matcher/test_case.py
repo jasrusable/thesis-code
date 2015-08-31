@@ -1,15 +1,16 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from cv2 import findHomography, perspectiveTransform
-from cv2 import polylines, drawMatches, LINE_AA
+from cv2 import polylines, drawMatches
 from cv2 import LINE_AA, RANSAC
 
 
 class TestCase(object):
     def __init__(self, test_image, query_image, detector,
-                matcher, detect_now=False, match_now=False):
+                matcher, detect_now=False, match_now=False,
+                test_preprocessors=[], query_preprocessors=[]):
         self.test_image = test_image
-        self.train_image = query_image
+        self.query_image = query_image
         self.detector = detector
         self.matcher = matcher
         self.test_keypoints = None
@@ -17,17 +18,26 @@ class TestCase(object):
         self.query_keypoints = None
         self.query_descriptors = None
         self.matches = None
+        self.test_preprocessors = test_preprocessors
+        self.query_preprocessors = query_preprocessors
         if detect_now:
             self.detect()
         if match_now:
             self.match()
+
+    def preprocess(self):
+        for preprocesser in self.test_preprocessors:
+            self.test_image.cv_image = preprocesser.process(self.test_image.cv_image)
+
+        for preprocesser in self.query_preprocessors:
+            self.query_image.cv_image = preprocesser.process(self.query_image.cv_image)
 
     def detect(self):
         self.test_keypoints, self.test_descriptors = (
             self.detector.detect(self.test_image.cv_image)
         )
         self.query_keypoints, self.query_descriptors = (
-            self.detector.detect(self.train_image.cv_image)
+            self.detector.detect(self.query_image.cv_image)
         )
 
     def match(self):
@@ -35,7 +45,8 @@ class TestCase(object):
             self.test_descriptors, self.query_descriptors
         )
 
-    def detect_and_match(self):
+    def do_all(self):
+        self.preprocess()
         self.detect()
         self.match()
 
@@ -50,7 +61,7 @@ class TestCase(object):
         pts = np.float32([[0, 0], [0, h - 1], [w - 1, h - 1], [w - 1, 0]]).reshape(-1, 1, 2)
         dst = perspectiveTransform(pts, M)
         scene_image = polylines(
-            self.train_image.cv_image, [np.int32(dst)], True, 255, 3, LINE_AA
+            self.query_image.cv_image, [np.int32(dst)], True, 255, 3, LINE_AA
         )
         draw_params = dict(
             matchColor=(0, 255, 0),
@@ -65,7 +76,7 @@ class TestCase(object):
         img3 = drawMatches(
             self.test_image.cv_image,
             self.test_keypoints,
-            self.train_image.cv_image,
+            self.query_image.cv_image,
             self.query_keypoints,
             self.matches,
             None,
