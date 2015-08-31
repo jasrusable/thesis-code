@@ -46,4 +46,5 @@ my_thing_2 = Thing(
     matcher=FLANNMatcher(),
 )
 
-#my_thing.detect_and_match()
+my_thing.detect_and_match()
+my_thing.plot()
