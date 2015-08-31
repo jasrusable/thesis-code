@@ -5,7 +5,7 @@ from cv2 import polylines, drawMatches, LINE_AA
 from cv2 import LINE_AA, RANSAC
 
 
-class Thing(object):
+class TestCase(object):
     def __init__(self, test_image, query_image, detector,
                 matcher, detect_now=False, match_now=False):
         self.test_image = test_image

@@ -2,15 +2,15 @@
 
 class Session(object):
     def __init__(self):
-        self._things = []
+        self._test_cases = []
 
     def add_thing(self, test):
-        self._things.append(test)
+        self._test_cases.append(test)
 
     def get_things(self):
-        return self._things
+        return self._test_cases
 
     def get_thing(self, thing_id):
-        for thing in self._things:
+        for thing in self._test_cases:
             if thing.id == thing_id:
                 return thing

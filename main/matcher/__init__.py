@@ -1,5 +1,5 @@
 from .session import Session
-from .thing import Thing
+from .test_case import TestCase
 from .detectors import SIFTDetector, ORBDetector
 from .matchers import BruteForceMatcher, FLANNMatcher
 from .images import TestImage, QueryImage

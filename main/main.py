@@ -3,7 +3,7 @@ import numpy as np
 from os.path import join
 from matplotlib import pyplot as plt
 
-from matcher import Session, Thing
+from matcher import Session, TestCase
 from matcher import Camera, TestImage, QueryImage
 from matcher import ORBDetector, SIFTDetector
 from matcher import BruteForceMatcher, FLANNMatcher
@@ -21,25 +21,23 @@ iphone4s = Camera(
     description='Iphone 4S camera.',
 )
 
-directory = '../images/model_1'
-
 test_image = TestImage(
-    file_path=join(directory, 'object.png'),
+    file_path='../images/model_1/object.png',
     camera=iphone4s,
 )
 query_image = QueryImage(
-    file_path=join(directory, 'scene.png'),
+    file_path='../images/model_1/scene.png',
     camera=blender_cam,
 )
 
-my_thing = Thing(
+my_thing = TestCase(
     test_image=test_image,
     query_image=query_image,
     detector=ORBDetector(),
     matcher=BruteForceMatcher(),
 )
 
-my_thing_2 = Thing(
+my_thing_2 = TestCase(
     test_image=test_image,
     query_image=query_image,
     detector=SIFTDetector(),
