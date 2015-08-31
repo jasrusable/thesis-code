@@ -5,7 +5,7 @@ class PreProcessor(object):
     def __init__(self):
         pass
 
-    def process(self, cv_image):
+    def process(self, image):
         raise NotImplementedError(
             'This method is to be implemented in a subclass.'
         )
@@ -15,7 +15,7 @@ class Smoother(PreProcessor):
     def __init__(self):
         pass
 
-    def process(self, cv_image):
+    def process(self, image):
         raise NotImplementedError(
             'This method is to be implemented in a subclass.'
         )
@@ -26,10 +26,11 @@ class AveragingSmoother(Smoother):
         self.kernel_x = kernel_x
         self.kernel_y = kernel_y
 
-    def process(self, cv_image):
-        return cv2.blur(
-            cv_image, (self.kernel_x, self.kernel_y)
+    def process(self, image):
+        image.cv_image = cv2.blur(
+            image.cv_image, (self.kernel_x, self.kernel_y)
             )
+        return image
 
 
 class GaussianSmoother(Smoother):
@@ -39,10 +40,11 @@ class GaussianSmoother(Smoother):
         self.sigma_x = sigma_x
         self.sigma_y = sigma_y
 
-    def process(self, cv_image):
-        return cv2.GaussianBlur(
-            cv_image,
+    def process(self, image):
+        image.cv_image = cv2.GaussianBlur(
+            image.cv_image,
             (self.kernel_x, self.kernel_y),
             self.sigma_x,
             self.sigma_y
             )
+        return image

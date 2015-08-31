@@ -33,7 +33,7 @@ query_image = QueryImage(
 my_thing = TestCase(
     test_image=test_image,
     test_preprocessors=[
-        GaussianSmoother(kernel_x=2, kernel_y=2),
+        GaussianSmoother(kernel_x=3, kernel_y=3),
     ],
     query_preprocessors=[
     ],

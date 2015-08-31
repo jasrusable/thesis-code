@@ -27,17 +27,17 @@ class TestCase(object):
 
     def preprocess(self):
         for preprocesser in self.test_preprocessors:
-            self.test_image.cv_image = preprocesser.process(self.test_image.cv_image)
+            self.test_image = preprocesser.process(self.test_image)
 
         for preprocesser in self.query_preprocessors:
-            self.query_image.cv_image = preprocesser.process(self.query_image.cv_image)
+            self.query_image = preprocesser.process(self.query_image)
 
     def detect(self):
         self.test_keypoints, self.test_descriptors = (
-            self.detector.detect(self.test_image.cv_image)
+            self.detector.detect(self.test_image)
         )
         self.query_keypoints, self.query_descriptors = (
-            self.detector.detect(self.query_image.cv_image)
+            self.detector.detect(self.query_image)
         )
 
     def match(self):
