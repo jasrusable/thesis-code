@@ -9,8 +9,8 @@
 	[
 		{
 			"name": "my_app-build",
-			"cmd": ["bash", "./build.sh"],
-    		"working_dir": "${project_path:${folder}}/my_app",
+			"cmd": ["python3", "main.py"],
+    		"working_dir": "${project_path:${folder}}/main",
 		}
 	]
 }
