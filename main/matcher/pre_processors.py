@@ -22,7 +22,7 @@ class Smoother(PreProcessor):
 
 
 class AveragingSmoother(Smoother):
-    def __init__(self, kernel_x, kernel_y):
+    def __init__(self, kernel_x=1, kernel_y=1):
         self.kernel_x = kernel_x
         self.kernel_y = kernel_y
 
@@ -34,7 +34,7 @@ class AveragingSmoother(Smoother):
 
 
 class GaussianSmoother(Smoother):
-    def __init__(self, kernel_x, kernel_y, sigma_x=0, sigma_y=0):
+    def __init__(self, kernel_x=1, kernel_y=1, sigma_x=0, sigma_y=0):
         self.kernel_x = kernel_x
         self.kernel_y = kernel_y
         self.sigma_x = sigma_x

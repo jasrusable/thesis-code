@@ -16,5 +16,5 @@ class TestImage(Image):
 
 
 class QueryImage(Image):
-    def __init__(self, file_path, camera):
+    def __init__(self, file_path, camera=None):
         Image.__init__(self, file_path, camera)
