@@ -1,5 +1,6 @@
-from .test import Test
 import copy
+import numpy
+from .test import Test
 
 
 class TestCase(object):
@@ -19,7 +20,12 @@ class TestCase(object):
             parameters = preprocessor_case.parameters
             for parameter in parameters:
                 assert (hasattr(preprocessor, parameter.name))
-                for val in range(parameter.from_, parameter.to):
+                range_ = numpy.arange(
+                    parameter.from_,
+                    parameter.to,
+                    parameter.step
+                )
+                for val in range_:
                     setattr(preprocessor, parameter.name, val)
                     self.tests.append(Test(
                         test_image=self.test_image,

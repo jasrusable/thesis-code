@@ -21,10 +21,10 @@ test_case = TestCase(
         PreProcessorCase(
             preprocessor=AveragingSmoother(),
             parameters=[IntegerParameter(
-                name='kernel_y',
+                name='kernel_x',
                 from_=1,
-                to=8,
-                interval=None
+                to=100,
+                step=1
             )],
         ),
     ],
@@ -34,6 +34,6 @@ test_case = TestCase(
 
 test_case.run_tests()
 
-test = test_case.tests[0]
+test = test_case.tests[10]
 test.do_all()
 print(test.plot())
