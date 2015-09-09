@@ -26,6 +26,10 @@ class AveragingSmoother(Smoother):
         self.kernel_x = kernel_x
         self.kernel_y = kernel_y
 
+    def __repr__(self):
+        return ("AveragingSmoother(kernel_x={x}, kernel_y={y})"
+                .format(x=self.kernel_x, y=self.kernel_y))
+
     def process(self, image):
         image.cv_image = cv2.blur(
             image.cv_image, (self.kernel_x, self.kernel_y)
@@ -39,6 +43,10 @@ class GaussianSmoother(Smoother):
         self.kernel_y = kernel_y
         self.sigma_x = sigma_x
         self.sigma_y = sigma_y
+
+    def __repr__(self):
+        return ("GaussianSmoother(kernel_x={x}, kernel_y={y}, sigma_x={sx}, sigma_y={sy})"
+                .format(x=self.kernel_x, y=self.kernel_y, sx=self.sigma_x, sy=self.sigma_y))
 
     def process(self, image):
         image.cv_image = cv2.GaussianBlur(

@@ -24,6 +24,14 @@ class Test(object):
         if match_now:
             self.match()
 
+    def describe(self):
+        text = "Test {0}\n".format(self)
+        text += "TestImage preprocessers: \n"
+        for preprocesser in self.test_preprocessors:
+            text += "    {0}\n".format(preprocesser)
+        text += "Number of matches: {0}".format(len(self.matches))
+        return str(text)
+
     def preprocess(self):
         for preprocesser in self.test_preprocessors:
             self.test_image = preprocesser.process(self.test_image)
