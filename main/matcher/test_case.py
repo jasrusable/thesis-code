@@ -28,8 +28,8 @@ class TestCase(object):
                 for val in range_:
                     setattr(preprocessor, parameter.name, val)
                     self.tests.append(Test(
-                        test_image=self.test_image,
-                        query_image=self.query_image,
+                        test_image=copy.deepcopy(self.test_image),
+                        query_image=copy.deepcopy(self.query_image),
                         detector=self.detector,
                         matcher=self.matcher,
                         test_preprocessors=[copy.deepcopy(preprocessor)]

@@ -14,18 +14,28 @@ query_image = QueryImage(
     file_path='../images/model_1/scene.png',
 )
 
+test_parameters = [
+    IntegerParameter(
+        name='kernel_x',
+        from_=1,
+        to=20,
+        step=1
+    ),
+    IntegerParameter(
+        name='kernel_y',
+        from_=1,
+        to=20,
+        step=1
+    )
+]
+
 test_case = TestCase(
     test_image=test_image,
     query_image=query_image,
     test_preprocessor_cases=[
         PreProcessorCase(
             preprocessor=AveragingSmoother(),
-            parameters=[IntegerParameter(
-                name='kernel_x',
-                from_=1,
-                to=100,
-                step=1
-            )],
+            parameters=test_parameters,
         ),
     ],
     detector=ORBDetector(),
@@ -34,6 +44,8 @@ test_case = TestCase(
 
 test_case.run_tests()
 
-test = test_case.tests[10]
-test.do_all()
-print(test.plot())
+test_1 = test_case.tests[0]
+test_1.do_all()
+test_2 = test_case.tests[20]
+test_2.do_all()
+test_1.plot()
