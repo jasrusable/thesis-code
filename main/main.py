@@ -17,15 +17,11 @@ query_image = QueryImage(
 test_parameters = [
     IntegerParameter(
         name='kernel_x',
-        from_=1,
-        to=20,
-        step=1
+        range_=range(1, 20, 10),
     ),
     IntegerParameter(
         name='kernel_y',
-        from_=1,
-        to=20,
-        step=1
+        range_=range(1, 20, 10),
     )
 ]
 
@@ -43,9 +39,6 @@ test_case = TestCase(
 )
 
 test_case.run_tests()
-
-test_1 = test_case.tests[0]
-test_1.do_all()
-test_2 = test_case.tests[20]
-test_2.do_all()
-test_1.plot()
+test = test_case.tests[0]
+test.do_all()
+test.plot()
